@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  redis:
+    image: redis:4
+
+  toxiproxy:
+    image: shopify/toxiproxy
+    ports:
+      - "16379:16379"
+      - "13306:13306"
+      - "18474:8474"

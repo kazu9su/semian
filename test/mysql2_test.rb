@@ -26,6 +26,7 @@ class TestMysql2 < Minitest::Test
 
   def test_semian_can_be_disabled
     resource = Mysql2::Client.new(
+      username: 'root',
       host: SemianConfig['toxiproxy_upstream_host'],
       port: SemianConfig['mysql_toxiproxy_port'],
       semian: false).semian_resource
@@ -256,6 +257,7 @@ class TestMysql2 < Minitest::Test
 
   def test_unconfigured
     client = Mysql2::Client.new(
+      username: 'root',
       host: SemianConfig['toxiproxy_upstream_host'],
       port: SemianConfig['mysql_toxiproxy_port'],
     )
@@ -325,6 +327,7 @@ class TestMysql2 < Minitest::Test
 
   def connect_to_mysql!(semian_options = {})
     Mysql2::Client.new(
+      username: 'root',
       connect_timeout: 2,
       read_timeout: 2,
       write_timeout: 2,
