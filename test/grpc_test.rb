@@ -58,7 +58,7 @@ class TestGRPC < Minitest::Test
 
   def test_timeout_opens_the_circuit
     stub = build_insecure_stub(EchoStub, host: "#{@hostname}:#{@port + 1}", opts: {timeout: 0.1, semian_options: SEMIAN_OPTIONS})
-
+    populate_toxiproxy
     run_services_on_server(@server, services: [EchoService]) do
       Toxiproxy['semian_test_grpc'].downstream(:latency, latency: 1000).apply do
         ERROR_THRESHOLD.times do
@@ -170,7 +170,6 @@ class TestGRPC < Minitest::Test
     @port = @server.add_http2_port("#{@hostname}:0", :this_port_is_insecure)
     @host = "#{@hostname}:#{@port}"
     @client_opts = client_opts
-    populate_toxiproxy
     @server
   end
 
