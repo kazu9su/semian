@@ -39,13 +39,7 @@ module Semian
     def resource_exceptions
       [
         ::GRPC::DeadlineExceeded,
-        ::GRPC::InvalidArgument,
-        ::GRPC::Cancelled,
-        ::GRPC::Unknown,
-        ::GRPC::NotFound,
-        ::GRPC::PermissionDenied,
         ::GRPC::ResourceExhausted,
-        ::GRPC::Aborted,
         ::GRPC::Unavailable,
         ::GRPC::BadStatus,
       ]
