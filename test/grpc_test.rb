@@ -58,7 +58,6 @@ class TestGRPC < Minitest::Test
 
   def test_timeout_opens_the_circuit
     stub = build_insecure_stub(EchoStub, host: "#{@hostname}:#{@port + 1}", opts: {timeout: 0.1, semian_options: SEMIAN_OPTIONS})
-    populate_toxiproxy
     run_services_on_server(@server, services: [EchoService]) do
       Toxiproxy['semian_test_grpc'].downstream(:latency, latency: 1000).apply do
         ERROR_THRESHOLD.times do
@@ -165,38 +164,17 @@ class TestGRPC < Minitest::Test
   end
 
   def build_rpc_server(server_opts: {}, client_opts: {})
-    @hostname = '0.0.0.0'
+    @hostname = '127.0.0.1'
     @server = new_rpc_server_for_testing({poll_period: 1}.merge(server_opts))
-    @port = @server.add_http2_port("#{@hostname}:0", :this_port_is_insecure)
+    @port = @server.add_http2_port("#{@hostname}:50051", :this_port_is_insecure)
     @host = "#{@hostname}:#{@port}"
     @client_opts = client_opts
     @server
   end
 
-  def populate_toxiproxy
-    Toxiproxy.populate([
-      {
-        name: 'semian_test_grpc',
-        upstream: "#{@hostname}:#{@port}",
-        listen: "#{@hostname}:#{@port + 1}",
-      },
-    ])
-  end
-
   def new_rpc_server_for_testing(server_opts = {})
     server_opts[:server_args] ||= {}
-    update_server_args_hash(server_opts[:server_args])
     GRPC::RpcServer.new(**server_opts)
-  end
-
-  def update_server_args_hash(server_args)
-    so_reuseport_arg = 'grpc.so_reuseport'
-    unless server_args[so_reuseport_arg].nil?
-      fail 'Unexpected. grpc.so_reuseport already set.'
-    end
-    # Run tests without so_reuseport to eliminate the chance of
-    # cross-talk.
-    server_args[so_reuseport_arg] = 0
   end
 
   def run_services_on_server(server, services: [])

@@ -39,6 +39,11 @@ Toxiproxy.populate([
     upstream: "#{SemianConfig['http_host']}:#{SemianConfig['http_port']}",
     listen: "#{SemianConfig['toxiproxy_upstream_host']}:#{SemianConfig['http_toxiproxy_port']}",
   },
+  {
+    name: 'semian_test_grpc',
+    upstream: "#{SemianConfig['grpc_host']}:#{SemianConfig['grpc_port']}",
+    listen: "#{SemianConfig['toxiproxy_upstream_host']}:#{SemianConfig['grpc_toxiproxy_port']}",
+  },
 ])
 
 class Minitest::Test
