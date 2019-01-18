@@ -2,9 +2,9 @@ require 'semian/adapter'
 require 'grpc'
 
 module GRPC
-  GRPC::BadStatus.include(::Semian::AdapterError)
+  GRPC::Unavailable.include(::Semian::AdapterError)
 
-  class SemianError < GRPC::BadStatus
+  class SemianError < GRPC::Unavailable
     attr_reader :details
 
     def initialize(semian_identifier, *args)
@@ -48,6 +48,8 @@ module Semian
 
     def raw_semian_options
       @raw_semian_options ||= begin
+        # If the host is empty, it's possible that the adapter was initialized
+        # with the channel. Therefore, we look into the channel to find the host
         if @host.empty?
           host = @ch.target
         else
@@ -67,7 +69,6 @@ module Semian
         ::GRPC::DeadlineExceeded,
         ::GRPC::ResourceExhausted,
         ::GRPC::Unavailable,
-        ::GRPC::BadStatus,
       ]
     end
 
