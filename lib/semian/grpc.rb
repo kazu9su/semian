@@ -3,6 +3,8 @@ require 'grpc'
 
 module GRPC
   GRPC::Unavailable.include(::Semian::AdapterError)
+  GRPC::Unknown.include(::Semian::AdapterError)
+  GRPC::ResourceExhausted.include(::Semian::AdapterError)
 
   class SemianError < GRPC::Unavailable
     attr_reader :details
@@ -69,6 +71,7 @@ module Semian
         ::GRPC::DeadlineExceeded,
         ::GRPC::ResourceExhausted,
         ::GRPC::Unavailable,
+        ::GRPC::Unknown,
       ]
     end
 
