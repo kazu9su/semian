@@ -75,20 +75,20 @@ module Semian
       ]
     end
 
-    def request_response(*args)
-      acquire_semian_resource(adapter: :grpc, scope: :request_response) { super(*args) }
+    def request_response(*)
+      acquire_semian_resource(adapter: :grpc, scope: :request_response) { super }
     end
 
-    def client_streamer(*args)
-      acquire_semian_resource(adapter: :grpc, scope: :client_streamer) { super(*args) }
+    def client_streamer(*)
+      acquire_semian_resource(adapter: :grpc, scope: :client_streamer) { super }
     end
 
-    def server_streamer(*args)
-      acquire_semian_resource(adapter: :grpc, scope: :server_streamer) { super(*args) }
+    def server_streamer(*)
+      acquire_semian_resource(adapter: :grpc, scope: :server_streamer) { super }
     end
 
-    def bidi_streamer(*args)
-      acquire_semian_resource(adapter: :grpc, scope: :bidi_streamer) { super(*args) }
+    def bidi_streamer(*)
+      acquire_semian_resource(adapter: :grpc, scope: :bidi_streamer) { super }
     end
   end
 end
